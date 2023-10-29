@@ -1,11 +1,17 @@
 import React, {useReducer} from "react";
 
-const initialState: State = {
-  isRequestInProgress: false,
-  requestStep: 'idle',
+type State   = {
+ 
+  isRequestInProgress: boolean, 
+  requestStep: 'start' | 'pending' | 'finished' | 'idle',
 };
-
-function requestReducer(state: State, action: Action): State {
+ 
+type Action =
+  | { type: 'START_REQUEST' }
+  | { type: 'PENDING_REQUEST' }
+  | { type: 'FINISH_REQUEST' }
+  | {type:'RESET_REQUEST'}; 
+function requestReducer(state:State , action: Action): State  {
   switch (action.type) {
     case 'START_REQUEST':
       return { ...state, isRequestInProgress: true, requestStep: 'start' };
@@ -19,7 +25,10 @@ function requestReducer(state: State, action: Action): State {
       return state;
   }
 }
-
+ const initialState: State = {
+  isRequestInProgress: false,
+  requestStep: "idle",
+};
 export function RequestComponent() {
   const [requestState, requestDispatch] = useReducer(requestReducer, initialState);
 
